@@ -13,6 +13,7 @@
       * [Seattle Crime Dataset](https://catalog.data.gov/dataset/spd-crime-data-2008-present-c0edb)
       * [NY Present Crime Dataset](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://catalog.data.gov/dataset/nypd-arrest-data-year-to-date&ved=2ahUKEwjfwuiGpqGRAxXpCnkGHXjNKSwQFnoECAwQAQ&usg=AOvVaw0IQDLlrkWfX8QdtBYrcURL)
       * [NY Historical Crime Dataset](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://catalog.data.gov/dataset/nypd-arrests-data-historic&ved=2ahUKEwjYlOGSpqGRAxXAj4kEHQHUKPIQFnoECBgQAQ&usg=AOvVaw2GrmcKIT9HPgLQRiMVt-xJ)
+      * [Hospitals in the US Dataset](https://drive.google.com/file/d/1NXmLSRI-BHEMxwYJbvIQ8CP911LpIDRv/view?usp=share_link)
 4. Install pandas and numpy (if needed)
    ```
    pip install pandas numpy
