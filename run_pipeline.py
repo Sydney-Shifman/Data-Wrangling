@@ -37,7 +37,14 @@ query = f"""
 """
 
 conn.execute(query)
-print("Finished ingesting data into duckdb")
+print("Finished ingesting data into duckdb")\
+
+row_count = conn.sql("SELECT COUNT(*) FROM Crimes").fetchone()[0]
+
+export_query = """
+               COPY Crimes TO 'combined_crime_data.csv' (HEADER, DELIMITER ',');
+"""
+conn.execute(export_query)
+print(f"Finished exporting combined data containing {row_count} rows to combined_crime_data.csv\n")
 
 conn.close()
-print("Successfully completed data pipeline")
