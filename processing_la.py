@@ -237,6 +237,51 @@ clean_la_df['OCC Time'] = pd.to_datetime(clean_la_df['OCC Time'], format='%H%M',
 clean_la_df['OCC Time'] = clean_la_df['OCC Time'].dt.strftime('%I:%M')
 print(f"\t- Fixed formatting of OCC Time to be in standard time")
 print("Finished cleaning data")
+
+#---------------------------------------
+# ADD HOSPITALS LOCATIONS TO DATA
+#---------------------------------------
+
+hospitals = pd.read_csv("hospital_coordinates.csv")
+print("Adding nearest hospital locations to data...")
+
+# Prepare hospital arrays
+hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
+hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
+hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
+hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
+
+# Prepare result columns with default "N/A"
+nearest_names = np.full(len(clean_la_df), "N/A", dtype=object)
+nearest_addrs = np.full(len(clean_la_df), "N/A", dtype=object)
+
+# Mask of rows with valid coordinates (non-null and not NaN)
+valid_mask = clean_la_df['LAT'].notna() & clean_la_df['LON'].notna()
+
+if valid_mask.any():
+    crime_lats = clean_la_df.loc[valid_mask, 'LAT'].to_numpy(dtype=float)
+    crime_lons = clean_la_df.loc[valid_mask, 'LON'].to_numpy(dtype=float)
+
+    # Compute squared Euclidean distances in a vectorized way:
+    # shape -> (n_crimes, n_hospitals)
+    dlat = crime_lats[:, None] - hosp_lats[None, :]
+    dlon = crime_lons[:, None] - hosp_lons[None, :]
+    d2 = dlat * dlat + dlon * dlon
+
+    # For each crime, find index of nearest hospital
+    nearest_idx = np.argmin(d2, axis=1)
+
+    # Map back to names and addresses
+    nearest_names[valid_mask.to_numpy()] = hosp_names[nearest_idx]
+    nearest_addrs[valid_mask.to_numpy()] = hosp_addrs[nearest_idx]
+
+# Assign to two separate columns
+clean_la_df['Nearest Hospital'] = nearest_names
+clean_la_df['Hospital Address'] = nearest_addrs
+
+print("Finished adding nearest hospital locations to data")
+
+
 #---------------------------------------
 # FILTER OUT CLEANED DATA FOR COMBINING
 #---------------------------------------
@@ -266,7 +311,7 @@ print(f"\t- Added column to identify city of crime")
 
 # Reorder the columns
 clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
-                             'Reported Location', 'Latitude', 'Longitude']]
+                             'Reported Location', 'Latitude', 'Longitude', 'Nearest Hospital', 'Hospital Address']]
 print(f"\t- Reordered columns to be more organized when combining data")
 print("Finished filtering data")
 print("Finished processing of LA data")
