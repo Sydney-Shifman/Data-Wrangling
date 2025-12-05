@@ -6,10 +6,15 @@ import nibrs_mapping
 # LOADING DATA
 #---------------------------------------
 print("\nBeginning processing of LA data...")
-# Load raw data
+print("Beginning loading of LA data...")
+# Load raw LA data
 la_df = pd.read_csv("Crime_Data_from_2020_to_Present.csv")
+print(f"Finished loading LA data containing {la_df.shape[0]} rows")
 
-print("Finished loading data")
+print("Beginning loading of Hospital data...")
+# Load raw Hospital data
+hospitals = pd.read_csv("hospital_coordinates.csv")
+print(f"Finished loading Hospital data containing {hospitals.shape[0]} rows")
 #---------------------------------------
 # CREATING MAPPING FOR DATA
 #---------------------------------------
@@ -187,7 +192,7 @@ print(f"\t- Mapped NIBRS Offense Code Description")
 # Map each NIBRS Offense Code Description to its Offense Category
 clean_la_df['Offense Category'] = clean_la_df['NIBRS Offense Code Description'].map(nibrs_mapping.nibrs_desc_to_cat)
 print(f"\t- Mapped Offense Category")
-print("Finished mapping of NIBRS for data")
+print("Finished mapping for data")
 #---------------------------------------
 # CLEANING MAPPED OUT DATA
 #---------------------------------------
@@ -215,11 +220,6 @@ clean_la_df['Report Date'] = date
 clean_la_df['Report Time'] = time
 print(f"\t- Separated Date Rptd column into Report Date and Report Time")
 
-# Fix formatting for date to follow mm/dd/yy
-clean_la_df['Report Date'] = pd.to_datetime(clean_la_df['Report Date'], format='%m/%d/%y', errors='coerce')
-clean_la_df['Report Date'] = clean_la_df['Report Date'].dt.strftime('%m/%d/%y')
-print(f"\t- Fixed formatting of Report Date for continuity")
-
 # Separate date and time for DATE OCC
 date = []
 
@@ -232,18 +232,15 @@ clean_la_df['OCC Date'] = date
 clean_la_df['OCC Time'] = clean_la_df['TIME OCC']
 print(f"\t- Separated Date OCC column into Report Date and Report Time")
 
-# Convert formatting for timestamp into standard time
+# Convert formatting for timestamp into standard time (include seconds)
 clean_la_df['OCC Time'] = pd.to_datetime(clean_la_df['OCC Time'], format='%H%M',errors='coerce')
-clean_la_df['OCC Time'] = clean_la_df['OCC Time'].dt.strftime('%I:%M')
+clean_la_df['OCC Time'] = clean_la_df['OCC Time'].dt.strftime('%I:%M:%S')
 print(f"\t- Fixed formatting of OCC Time to be in standard time")
 print("Finished cleaning data")
-
 #---------------------------------------
-# ADD HOSPITALS LOCATIONS TO DATA
+# ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
-
-hospitals = pd.read_csv("hospital_coordinates.csv")
-print("Adding nearest hospital locations to data...")
+print("Beginning adding nearest hospital locations to data...")
 
 # Prepare hospital arrays
 hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
@@ -251,9 +248,9 @@ hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
 hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
 hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
 
-# Prepare result columns with default "N/A"
-nearest_names = np.full(len(clean_la_df), "N/A", dtype=object)
-nearest_addrs = np.full(len(clean_la_df), "N/A", dtype=object)
+# Prepare result columns with default np.nan
+nearest_names = np.full(len(clean_la_df), np.nan, dtype=object)
+nearest_addrs = np.full(len(clean_la_df), np.nan, dtype=object)
 
 # Mask of rows with valid coordinates (non-null and not NaN)
 valid_mask = clean_la_df['LAT'].notna() & clean_la_df['LON'].notna()
@@ -278,10 +275,9 @@ if valid_mask.any():
 # Assign to two separate columns
 clean_la_df['Nearest Hospital'] = nearest_names
 clean_la_df['Hospital Address'] = nearest_addrs
-
+print(f"\t- Added column to identify nearest hospital")
+print(f"\t- Added column to identify hospital address")
 print("Finished adding nearest hospital locations to data")
-
-
 #---------------------------------------
 # FILTER OUT CLEANED DATA FOR COMBINING
 #---------------------------------------
@@ -313,12 +309,13 @@ print(f"\t- Added column to identify city of crime")
 clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
                              'Reported Location', 'Latitude', 'Longitude', 'Nearest Hospital', 'Hospital Address']]
 print(f"\t- Reordered columns to be more organized when combining data")
+
 print("Finished filtering data")
 print("Finished processing of LA data")
 #---------------------------------------
 # EXPORTING CLEANED DATA
 #---------------------------------------
-print("Beginning export of LA data...")
+print(f"Beginning exporting LA data containing {clean_la_df.shape[0]} rows...")
 # Create .csv file for cleaned version of data
 clean_la_df.to_csv("clean_la.csv", index=False)
 print("Finished exporting cleaned and filtered data to clean_la.csv\n")

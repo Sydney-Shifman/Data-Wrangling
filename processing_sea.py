@@ -6,10 +6,15 @@ import re
 # LOADING DATA
 #---------------------------------------
 print("\nBeginning processing of Seattle data...")
-# Load raw data
+print("Beginning loading of Seattle data...")
+# Load raw Seattle data
 spd_df = pd.read_csv("SPD_Crime_Data__2008-Present.csv")
+print(f"Finished loading Seattle data containing {spd_df.shape[0]} rows")
 
-print("Finished loading data")
+print("Beginning loading of Hospital data...")
+# Load raw Hospital data
+hospitals = pd.read_csv("hospital_coordinates.csv")
+print(f"Finished loading Hospital data containing {hospitals.shape[0]} rows")
 #---------------------------------------
 # CLEANING MAPPED OUT DATA
 #---------------------------------------
@@ -74,13 +79,10 @@ clean_spd_df['Report Date'] = date
 clean_spd_df['Report Time'] = time
 print(f"\t- Separated DateTime column into Report Date and Report Time")
 print("Finished cleaning data")
-
 #---------------------------------------
-# ADD HOSPITALS LOCATIONS TO DATA
+# ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
-
-hospitals = pd.read_csv("hospital_coordinates.csv")
-print("Adding nearest hospital locations to data...")
+print("Beginning adding nearest hospital locations to data...")
 
 # Prepare hospital arrays
 hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
@@ -88,9 +90,9 @@ hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
 hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
 hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
 
-# Prepare result columns with default "N/A"
-nearest_names = np.full(len(clean_spd_df), "N/A", dtype=object)
-nearest_addrs = np.full(len(clean_spd_df), "N/A", dtype=object)
+# Prepare result columns with default np.nan
+nearest_names = np.full(len(clean_spd_df), np.nan, dtype=object)
+nearest_addrs = np.full(len(clean_spd_df), np.nan, dtype=object)
 
 # Mask of rows with valid coordinates (non-null and not NaN)
 valid_mask = clean_spd_df['Latitude'].notna() & clean_spd_df['Longitude'].notna()
@@ -115,11 +117,9 @@ if valid_mask.any():
 # Assign to two separate columns
 clean_spd_df['Nearest Hospital'] = nearest_names
 clean_spd_df['Hospital Address'] = nearest_addrs
-
+print(f"\t- Added column to identify nearest hospital")
+print(f"\t- Added column to identify hospital address")
 print("Finished adding nearest hospital locations to data")
-
-
-
 #---------------------------------------
 # FILTER OUT CLEANED DATA FOR COMBINING
 #---------------------------------------
@@ -151,7 +151,7 @@ print("Finished processing of Seattle data")
 #---------------------------------------
 # EXPORTING CLEANED DATA
 #---------------------------------------
-print("Beginning export of Seattle data...")
+print(f"Beginning exporting Seattle data containing {clean_spd_df.shape[0]} rows...")
 # Create .csv file for cleaned version of data
 clean_spd_df.to_csv('clean_sea.csv', index=False)
 print("Finished exporting cleaned and filtered data to clean_sea.csv\n")

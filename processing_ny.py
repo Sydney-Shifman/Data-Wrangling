@@ -6,7 +6,8 @@ import nibrs_mapping
 # LOADING DATA
 #---------------------------------------
 print("\nBeginning processing of NY data...")
-# Load raw data
+print("Beginning loading of NY data...")
+# Load raw NY data
 historic_df = pd.read_csv("NYPD_Arrests_Data__Historic_.csv")
 present_df = pd.read_csv("NYPD_Arrest_Data__Year_to_Date_.csv")
 
@@ -17,7 +18,12 @@ print(f"\t- Renamed Lon_Lat to Location for merging")
 # Merge raw data together
 combined_df = pd.concat([historic_df, present_df], ignore_index=True)
 print(f"\t- Merged data from .csv files together")
-print("Finished loading data")
+print(f"Finished loading NY data containing {combined_df.shape[0]} rows")
+
+print("Beginning loading of Hospital data...")
+# Load raw Hospital data
+hospitals = pd.read_csv("hospital_coordinates.csv")
+print(f"Finished loading Hospital data containing {hospitals.shape[0]} rows")
 #---------------------------------------
 # CREATING MAPPING FOR DATA
 #---------------------------------------
@@ -704,7 +710,7 @@ print(f"\t- Mapped Offense Category")
 
 clean_combined_df['Borough'] = clean_combined_df['ARREST_BORO'].map(ltr_to_borough)
 print(f"\t- Mapped Borough Name")
-print("Finished mapping of NIBRS for data")
+print("Finished mapping for data")
 #---------------------------------------
 # CLEANING MAPPED OUT DATA
 #---------------------------------------
@@ -718,13 +724,10 @@ clean_combined_df = clean_combined_df[clean_combined_df['PD_DESC'].notnull()].co
 print(f"\t- Removed {combined_df.shape[0] - clean_combined_df.shape[0]} rows that represent an unidentified report")
 
 print("Finished cleaning data")
-
 #---------------------------------------
-# ADD HOSPITALS LOCATIONS TO DATA
+# ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
-
-hospitals = pd.read_csv("hospital_coordinates.csv")
-print("Adding nearest hospital locations to data...")
+print("Beginning adding nearest hospital locations to data...")
 
 # Prepare hospital arrays
 hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
@@ -732,9 +735,9 @@ hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
 hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
 hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
 
-# Prepare result columns with default "N/A"
-nearest_names = np.full(len(clean_combined_df), "N/A", dtype=object)
-nearest_addrs = np.full(len(clean_combined_df), "N/A", dtype=object)
+# Prepare result columns with default np.nan
+nearest_names = np.full(len(clean_combined_df), np.nan, dtype=object)
+nearest_addrs = np.full(len(clean_combined_df), np.nan, dtype=object)
 
 # Mask of rows with valid coordinates (non-null and not NaN)
 valid_mask = clean_combined_df['Latitude'].notna() & clean_combined_df['Longitude'].notna()
@@ -759,10 +762,9 @@ if valid_mask.any():
 # Assign to two separate columns
 clean_combined_df['Nearest Hospital'] = nearest_names
 clean_combined_df['Hospital Address'] = nearest_addrs
-
+print(f"\t- Added column to identify nearest hospital")
+print(f"\t- Added column to identify hospital address")
 print("Finished adding nearest hospital locations to data")
-
-
 #---------------------------------------
 # FILTER OUT CLEANED DATA FOR COMBINING
 #---------------------------------------
@@ -796,7 +798,7 @@ print("Finished processing of NY data")
 #---------------------------------------
 # EXPORTING CLEANED DATA
 #---------------------------------------
-print("Beginning export of NY data...")
+print(f"Beginning exporting NY data containing {clean_combined_df.shape[0]} rows...")
 # Create .csv file for cleaned version of data
 clean_combined_df.to_csv('clean_ny.csv', index=False)
 print("Finished exporting cleaned and filtered data to clean_ny.csv\n")
