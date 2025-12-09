@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import nibrs_mapping
-import processing_hospital
 
 #---------------------------------------
 # LOADING DATA
@@ -237,8 +236,8 @@ print("Finished cleaning data")
 # ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
 print("Beginning adding nearest hospital locations to data...")
-# Add cleaned hospital for use
-clean_hospital_df = processing_hospital.clean_hospital_df
+# Load cleaned hospital data for use
+clean_hospital_df = pd.read_csv('clean_hospital.csv')
 
 # Prepare hospital arrays
 hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
@@ -305,7 +304,7 @@ print(f"\t- Added column to identify city of crime")
 
 # Reorder the columns
 clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
-                             'Reported Location', 'Latitude', 'Longitude']]
+                             'Reported Location', 'Latitude', 'Longitude', 'Nearest Hospital', 'Hospital Address']]
 print(f"\t- Reordered columns to be more organized when combining data")
 
 print("Finished filtering data")

@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import re
-import processing_hospital
 
 #---------------------------------------
 # LOADING DATA
@@ -79,8 +78,8 @@ print("Finished cleaning data")
 # ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
 print("Beginning adding nearest hospital locations to data...")
-# Add cleaned hospital for use
-clean_hospital_df = processing_hospital.clean_hospital_df
+# Load cleaned hospital data for use
+clean_hospital_df = pd.read_csv('clean_hospital.csv')
 
 # Prepare hospital arrays
 hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
