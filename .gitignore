@@ -1,6 +1,9 @@
 # Ignore JetBrains IDE project files
 .idea/
 
+# Ignore macOS Finder metadata
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
