@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import re
+import processing_hospital
 
 #---------------------------------------
 # LOADING DATA
@@ -10,11 +11,6 @@ print("Beginning loading of Seattle data...")
 # Load raw Seattle data
 spd_df = pd.read_csv("SPD_Crime_Data__2008-Present.csv")
 print(f"Finished loading Seattle data containing {spd_df.shape[0]} rows")
-
-print("Beginning loading of Hospital data...")
-# Load raw Hospital data
-hospitals = pd.read_csv("hospital_coordinates.csv")
-print(f"Finished loading Hospital data containing {hospitals.shape[0]} rows")
 #---------------------------------------
 # CLEANING MAPPED OUT DATA
 #---------------------------------------
@@ -83,12 +79,14 @@ print("Finished cleaning data")
 # ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
 print("Beginning adding nearest hospital locations to data...")
+# Add cleaned hospital for use
+clean_hospital_df = processing_hospital.clean_hospital_df
 
 # Prepare hospital arrays
-hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
-hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
-hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
-hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
+hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
+hosp_lons = clean_hospital_df['Longitude'].to_numpy(dtype=float)
+hosp_names = clean_hospital_df['Hospital Name'].to_numpy(dtype=object)
+hosp_addrs = clean_hospital_df['Address'].to_numpy(dtype=object)
 
 # Prepare result columns with default np.nan
 nearest_names = np.full(len(clean_spd_df), np.nan, dtype=object)

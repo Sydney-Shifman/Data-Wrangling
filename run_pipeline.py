@@ -6,10 +6,14 @@ import duckdb
 # RUN PIPELINE FOR SCRIPTS
 #---------------------------------------
 # Configuration
+CLEAN_HOSPITAL = 'clean_hospital.csv'
 CLEAN_SEA = 'clean_sea.csv'
 CLEAN_NY = 'clean_ny.csv'
 CLEAN_LA = 'clean_la.csv'
 DB_FILE = 'crimes_analysis.duckdb'
+
+# Run the Hospital Processing Script
+subprocess.run(['python3', 'processing_hospital.py', '/us_hospital_locations.csv', CLEAN_HOSPITAL], check=True)
 
 # Run the SEA Processing Script
 subprocess.run(['python3', 'processing_sea.py', '/SPD_Crime_Data__2008-Present.csv', CLEAN_SEA], check=True)

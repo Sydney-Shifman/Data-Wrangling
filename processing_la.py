@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import nibrs_mapping
+import processing_hospital
 
 #---------------------------------------
 # LOADING DATA
@@ -10,11 +11,6 @@ print("Beginning loading of LA data...")
 # Load raw LA data
 la_df = pd.read_csv("Crime_Data_from_2020_to_Present.csv")
 print(f"Finished loading LA data containing {la_df.shape[0]} rows")
-
-print("Beginning loading of Hospital data...")
-# Load raw Hospital data
-hospitals = pd.read_csv("hospital_coordinates.csv")
-print(f"Finished loading Hospital data containing {hospitals.shape[0]} rows")
 #---------------------------------------
 # CREATING MAPPING FOR DATA
 #---------------------------------------
@@ -241,12 +237,14 @@ print("Finished cleaning data")
 # ADDING HOSPITAL LOCATIONS TO DATA
 #---------------------------------------
 print("Beginning adding nearest hospital locations to data...")
+# Add cleaned hospital for use
+clean_hospital_df = processing_hospital.clean_hospital_df
 
 # Prepare hospital arrays
-hosp_lats = hospitals['LATITUDE'].to_numpy(dtype=float)
-hosp_lons = hospitals['LONGITUDE'].to_numpy(dtype=float)
-hosp_names = hospitals['HOSPITAL NAME'].to_numpy(dtype=object)
-hosp_addrs = hospitals['ADDRESS'].to_numpy(dtype=object)
+hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
+hosp_lons = clean_hospital_df['Longitude'].to_numpy(dtype=float)
+hosp_names = clean_hospital_df['Hospital Name'].to_numpy(dtype=object)
+hosp_addrs = clean_hospital_df['Address'].to_numpy(dtype=object)
 
 # Prepare result columns with default np.nan
 nearest_names = np.full(len(clean_la_df), np.nan, dtype=object)
@@ -307,7 +305,7 @@ print(f"\t- Added column to identify city of crime")
 
 # Reorder the columns
 clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
-                             'Reported Location', 'Latitude', 'Longitude', 'Nearest Hospital', 'Hospital Address']]
+                             'Reported Location', 'Latitude', 'Longitude']]
 print(f"\t- Reordered columns to be more organized when combining data")
 
 print("Finished filtering data")
