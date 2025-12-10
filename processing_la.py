@@ -242,7 +242,7 @@ print(f"\t- Loaded cleaned hospital data")
 # Prepare hospital arrays
 hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
 hosp_lons = clean_hospital_df['Longitude'].to_numpy(dtype=float)
-hosp_names = clean_hospital_df['Hospital Name'].to_numpy(dtype=object)
+hosp_names = clean_hospital_df['Name'].to_numpy(dtype=object)
 hosp_addrs = clean_hospital_df['Address'].to_numpy(dtype=object)
 
 # Prepare result columns with default np.nan
@@ -294,7 +294,7 @@ clean_la_df.rename(columns={'AREA NAME': 'Reported Area'}, inplace=True)
 clean_la_df.rename(columns={'LAT': 'Latitude'}, inplace=True)
 clean_la_df.rename(columns={'LON': 'Longitude'}, inplace=True)
 clean_la_df.rename(columns={'Offense Category': 'NIBRS Category'}, inplace=True)
-clean_la_df.rename(columns={'NIBRS Offense Code Description': 'NIBRS Desc'}, inplace=True)
+clean_la_df.rename(columns={'NIBRS Offense Code Description': 'NIBRS Description'}, inplace=True)
 clean_la_df.rename(columns={'NIBRS_offense_code': 'NIBRS Code'}, inplace=True)
 print(f"\t- Renamed columns for continuity when combining data")
 
@@ -303,7 +303,7 @@ clean_la_df['City'] = 'Los Angeles'
 print(f"\t- Added column to identify city of crime")
 
 # Reorder the columns
-clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
+clean_la_df = clean_la_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Description', 'NIBRS Category', 'Reported Area',
                              'Reported Location', 'Nearest Hospital', 'Hospital Address', 'Latitude', 'Longitude']]
 print(f"\t- Reordered columns to be more organized when combining data")
 

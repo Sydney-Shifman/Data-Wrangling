@@ -70,7 +70,7 @@ clean_hospital_df.drop(columns=['X', 'Y', 'FID', 'ID', 'STATE', 'ZIP', 'ZIP4', '
 print(f"\t- Dropped {num_columns - len(clean_hospital_df.columns)} unnecessary columns")
 
 # Rename columns for continuity
-clean_hospital_df.rename(columns={'NAME': 'Hospital Name'}, inplace=True)
+clean_hospital_df.rename(columns={'NAME': 'Name'}, inplace=True)
 clean_hospital_df.rename(columns={'LATITUDE': 'Latitude'}, inplace=True)
 clean_hospital_df.rename(columns={'LONGITUDE': 'Longitude'}, inplace=True)
 clean_hospital_df.rename(columns={'CITY': 'City'}, inplace=True)
@@ -78,7 +78,7 @@ clean_hospital_df.rename(columns={'ADDRESS': 'Address'}, inplace=True)
 print(f"\t- Renamed columns for continuity across .csv files")
 
 # Reorder the columns
-clean_hospital_df = clean_hospital_df[['City', 'Hospital Name', 'Address', 'Latitude', 'Longitude']]
+clean_hospital_df = clean_hospital_df[['City', 'Name', 'Address', 'Latitude', 'Longitude']]
 print(f"\t- Reordered columns to be more organized")
 print("Finished filtering data")
 print("Finished processing of Hospital data")
