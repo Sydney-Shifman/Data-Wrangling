@@ -3,7 +3,7 @@ import pandas as pd
 # ---------------------------------------
 # LOADING DATA
 # ---------------------------------------
-# Load raw data from Hosptial
+# Load raw data from Hospital
 print("Beginning loading of Hospital data...")
 hospital_df = pd.read_csv("us_hospital_locations.csv")
 print(f"Finished loading Hospital data containing {hospital_df.shape[0]} rows")
@@ -18,7 +18,7 @@ areas_in_ny = {
     'STATEN ISLAND': 'NEW YORK',
     'WARDS ISLAND': 'NEW YORK'
 }
-print(f"\t- Created Borough in City Dictionary")
+print(f"\t- Created City Dictionary for NY")
 
 # City Dictionary for LA
 areas_in_la = {
@@ -31,7 +31,7 @@ areas_in_la = {
     'WEST HILLS': 'LOS ANGELES',
     'WOODLAND HILLS': 'LOS ANGELES'
 }
-print(f"\t- Created Neighborhood in City Dictionary")
+print(f"\t- Created City Dictionary for LA")
 print("Finished creating mapping for data")
 # ---------------------------------------
 # PROCESSING MAPPING
@@ -44,11 +44,11 @@ clean_hospital_df = hospital_df.copy()
 clean_hospital_df = clean_hospital_df[clean_hospital_df['STATE'].isin(['WA', 'CA', 'NY'])]
 print(f"\t- Filtered hospitals in WA, CA, NY")
 
-# Map each area to city
+# Map each area to city for NY
 clean_hospital_df['CITY'] = clean_hospital_df['CITY'].map(areas_in_ny).fillna(clean_hospital_df['CITY'])
 print(f"\t- Mapped to include area in NY")
 
-# Map each area to city
+# Map each area to city for LA
 clean_hospital_df['CITY'] = clean_hospital_df['CITY'].map(areas_in_la).fillna(clean_hospital_df['CITY'])
 print(f"\t- Mapped to include area in LA")
 print("Finished mapping for data")
@@ -80,7 +80,6 @@ print(f"\t- Renamed columns for continuity across .csv files")
 # Reorder the columns
 clean_hospital_df = clean_hospital_df[['City', 'Hospital Name', 'Address', 'Latitude', 'Longitude']]
 print(f"\t- Reordered columns to be more organized")
-
 print("Finished filtering data")
 print("Finished processing of Hospital data")
 # ---------------------------------------

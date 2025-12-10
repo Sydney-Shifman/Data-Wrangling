@@ -80,6 +80,7 @@ print("Finished cleaning data")
 print("Beginning adding nearest hospital locations to data...")
 # Load cleaned hospital data for use
 clean_hospital_df = pd.read_csv('clean_hospital.csv')
+print(f"\t- Loaded cleaned hospital data")
 
 # Prepare hospital arrays
 hosp_lats = clean_hospital_df['Latitude'].to_numpy(dtype=float)
@@ -141,7 +142,7 @@ print(f"\t- Added column to identify city of crime")
 
 # Reorder the columns
 clean_spd_df = clean_spd_df[['City', 'Report Number', 'Report Date', 'NIBRS Code', 'NIBRS Desc', 'NIBRS Category', 'Reported Area',
-                             'Reported Location', 'Latitude', 'Longitude', 'Nearest Hospital', 'Hospital Address']]
+                             'Reported Location', 'Nearest Hospital', 'Hospital Address', 'Latitude', 'Longitude']]
 print(f"\t- Reordered columns to be more organized when combining data")
 print("Finished filtering data")
 print("Finished processing of Seattle data")

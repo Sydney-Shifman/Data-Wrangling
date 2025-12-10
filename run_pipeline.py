@@ -1,7 +1,6 @@
 import subprocess
 import duckdb
 
-
 #---------------------------------------
 # RUN PIPELINE FOR SCRIPTS
 #---------------------------------------
@@ -23,8 +22,6 @@ subprocess.run(['python3', 'processing_ny.py', '/NYPD_Arrests_Data__Historic_.cs
 
 # Run the LA Processing Script
 subprocess.run(['python3', 'processing_la.py', '/Crime_Data_from_2020_to_Present.csv', CLEAN_LA], check=True)
-
-
 #---------------------------------------
 # INGEST DATA INTO DUCKDB
 #---------------------------------------
@@ -40,7 +37,7 @@ query = f"""
     SELECT * FROM read_csv_auto('{CLEAN_LA}');
 """
 
-print("Beginning ingesting data into duckdb...")
+print("\nBeginning ingesting data into duckdb...")
 conn.execute(query)
 print("Finished ingesting data into duckdb")
 

@@ -14,7 +14,7 @@
       * [Seattle Crime Dataset](https://drive.google.com/file/d/1TbS0z8C-5gvb1gBNnI0R2DBDXqw5ik1N/view?usp=share_link)
       * [NY Present Crime Dataset](https://drive.google.com/file/d/1gTVBIecJ-j8aeueo43Mj1yqzrdqDBIQW/view?usp=share_link)
       * [NY Historical Crime Dataset](https://drive.google.com/file/d/1y1s4PohdHsOZFcB-QLHjVkkBEoKvDXbV/view?usp=share_link)
-      * [Hospitals in the US Dataset](https://drive.google.com/file/d/1PD0nUwEjm-Ew8Olt8-DqMXss9ZzDHom4/view?usp=share_link)
+      * [Hospitals in the US Dataset](https://drive.google.com/file/d/1KjbWb2QsnssfoqSfPuTKHI9A3d9KfO8A/view?usp=sharing)
         
 4. Move downloaded .csv files into repository (commands if cloned to Desktop)
    ```
@@ -54,7 +54,7 @@
       * [Seattle Crime Dataset](https://drive.google.com/file/d/1TbS0z8C-5gvb1gBNnI0R2DBDXqw5ik1N/view?usp=share_link)
       * [NY Present Crime Dataset](https://drive.google.com/file/d/1gTVBIecJ-j8aeueo43Mj1yqzrdqDBIQW/view?usp=share_link)
       * [NY Historical Crime Dataset](https://drive.google.com/file/d/1y1s4PohdHsOZFcB-QLHjVkkBEoKvDXbV/view?usp=share_link)
-      * [Hospitals in the US Dataset](https://drive.google.com/file/d/1PD0nUwEjm-Ew8Olt8-DqMXss9ZzDHom4/view?usp=share_link)
+      * [Hospitals in the US Dataset](https://drive.google.com/file/d/1KjbWb2QsnssfoqSfPuTKHI9A3d9KfO8A/view?usp=sharing)
         
 3. Move downloaded .csv files into repository
 4. Install pandas, numpy, duckdb packages in Python Interpreter (if needed)
