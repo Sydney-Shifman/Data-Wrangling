@@ -30,7 +30,7 @@
    mv ~/Downloads/SPD_Crime_Data__2008-Present.csv ~/Data-Wrangling
    ```
    ```
-   mv ~/Downloads/hospital_coordinates.csv ~/Data-Wrangling
+   mv ~/Downloads/us_hospital_locations.csv ~/Data-Wrangling
    ```
 6. Install pandas, numpy, duckdb (if needed)
    ```
